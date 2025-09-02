@@ -26,6 +26,7 @@
     background: linear-gradient(90deg,var(--accent),var(--accent-2));
     color:#fff;font-weight:700;font-size:14px;text-align:center;padding:10px 12px;position:sticky;top:0;z-index:40;
   }
+  .promo b{color:#000;}
   .hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
   .brand{display:flex;align-items:center;gap:10px}
   .brand img{height:34px;width:auto}
@@ -67,7 +68,17 @@
   .rating{color:#f59e0b;font-weight:800}
   .desc{color:var(--muted);margin:6px 0 12px}
 
-  .deadline{margin:0 16px 12px;background:#e8fff3;border:1px solid #bdf3d3;color:#0a8f55;font-weight:800;border-radius:999px;padding:10px 14px;text-align:center}
+  .deadline{
+    margin:0 16px 12px;
+    background:#e8fff3;
+    border:3px dashed #16a34a;
+    color:#000;
+    font-weight:800;
+    border-radius:999px;
+    padding:10px 14px;
+    text-align:center;
+  }
+  .deadline b{color:#0a8f55;}
 
   .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--line);margin:12px 16px;padding:14px}
   .card h3{margin:0 0 8px;font-size:16px;font-weight:900}
@@ -148,7 +159,7 @@
     <section class="card" id="one-time-card">
       <div class="row-split">
         <h3>Alege pachetul...</h3>
-        <div class="subtle">...cel mai potrivi</div>
+        <div class="subtle">...cel mai potrivit</div>
       </div>
       <div class="packs" id="packs">
         <label class="pack active" data-qty="1" data-price="249">
