@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Pantofi din Piele Naturală – Landing</title>
+<title>Pantofi din Piele Naturală</title>
 <style>
   :root{
     --bg: #fff3ea;
@@ -36,26 +36,22 @@
   .hamb span:before,.hamb span:after{content:"";position:absolute;left:0;right:0;height:2px;background:#111}
   .hamb span:before{top:-6px}.hamb span:after{top:6px}
 
-  .hero{padding:0 16px 8px;text-align:center}
-  .hero h1{margin:6px 0 4px;color:var(--accent);font-size:34px;line-height:1.05;font-weight:900;letter-spacing:.2px}
-  .hero p{margin:0;color:var(--muted);font-weight:600}
-  .prod-shot{
-    margin:14px auto 10px;
+  .hero{padding:0 16px;text-align:center;position:relative}
+  .hero h1{margin:6px 0 4px;color:var(--accent);font-size:34px;line-height:1.05;font-weight:900;letter-spacing:.2px;position:relative;z-index:2}
+  .hero p{margin:0;color:var(--muted);font-weight:600;position:relative;z-index:2}
+  .hero img.bg-hero{
     width:100%;
-    display:grid;
-    place-items:center;
-    background:var(--bg);
-    box-shadow:none;
-  }
-  .prod-shot img{
-    max-width:95%;
+    max-width:430px;
     height:auto;
     display:block;
     margin:0 auto;
-    filter:drop-shadow(0 14px 22px rgba(0,0,0,.18));
+    position:relative;
+    z-index:1;
+    margin-top:-20px;
+    margin-bottom:-20px;
   }
 
-  .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:10px 12px}
+  .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;padding:10px 12px;position:relative;z-index:2}
   .stat{background:#ffe7da;border-radius:14px;padding:10px 6px;text-align:center}
   .stat b{display:block;font-size:14px}
   .stat small{display:block;font-size:11px;color:#9a6a54;font-weight:600}
@@ -109,7 +105,8 @@
     <div class="promo">Reducere 20% Off Doar Astazi cu codul: <b>PANTOF20</b></div>
     <header class="hdr">
       <div class="brand">
-        <img src="https://raw.githubusercontent.com/afkishere/assets/main/logo-light.png" alt="ePieleNaturala Logo" />  
+        <img src="https://raw.githubusercontent.com/afkishere/assets/main/logo-light.png" alt="ePieleNaturala Logo" />
+        
       </div>
       <a class="pill" href="#">Comandă acum</a>
       <div class="hamb" aria-label="menu"><span></span></div>
@@ -118,9 +115,7 @@
     <section class="hero">
       <h1>Reducere pana la 50%</h1>
       <p>Comanzi acum si beneficiezi de -20% reducere</p>
-      <div class="prod-shot">
-        <img src="https://github.com/afkishere/assets/raw/main/hero-image.png" alt="Pantofi din piele naturală" />
-      </div>
+      <img class="bg-hero" src="https://github.com/afkishere/assets/raw/main/hero-image.png" alt="Pantofi din piele naturală" />
     </section>
 
     <div class="stats">
