@@ -34,7 +34,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             padding: 20px;
             transition: background-color 0.3s, color 0.3s;
@@ -183,20 +183,7 @@
         .explanation-item p {
             font-size: 14px;
             margin: 0;
-        }
-
-        .explanation-item code {
-            font-family: monospace;
-            background-color: var(--input-bg-dark);
-            padding: 2px 4px;
-            border-radius: 4px;
-            color: var(--header-text-dark);
-            font-size: 13px;
-        }
-
-        body.light-mode .explanation-item code {
-            background-color: var(--input-bg-light);
-            color: var(--header-text-light);
+            line-height: 1.5;
         }
     </style>
 </head>
@@ -214,8 +201,12 @@
         <div class="inputs-section">
             <h2 id="inputs-title" class="section-title">Inputs</h2>
             <div class="input-group">
-                <label id="label-profit" for="available-profit">Profit disponibil (RON)</label>
-                <input type="number" id="available-profit" value="65">
+                <label id="label-gross-profit" for="gross-profit">Profit Brut (RON)</label>
+                <input type="number" id="gross-profit" value="115">
+            </div>
+            <div class="input-group">
+                <label id="label-fixed-costs" for="fixed-costs">Cheltuieli fixe/logistică (RON)</label>
+                <input type="number" id="fixed-costs" value="50">
             </div>
             <div class="input-group">
                 <label id="label-ad-cost" for="ad-cost">Costul reclamelor (RON)</label>
@@ -225,6 +216,10 @@
 
         <div class="results-section">
             <h2 id="results-title" class="section-title">Results</h2>
+            <div class="result-item">
+                <span id="label-available-profit">Profit disponibil:</span>
+                <span id="available-profit-result" class="value"></span>
+            </div>
             <div class="result-item">
                 <span id="label-net-profit">Profit net:</span>
                 <span id="net-profit-result" class="value"></span>
@@ -236,19 +231,16 @@
         </div>
 
         <div class="explanations-section">
-            <h2 id="explanations-title" class="section-title">Column Explanations & Logic</h2>
+            <h2 id="explanations-title" class="section-title">Explicații & Formule</h2>
             <div id="explanations-content">
                 <div class="explanation-item">
-                    <p id="exp-profit"><span>Profit disponibil</span> = Profit brut - Cheltuieli fixe/logistice.</p>
+                    <p id="exp-available-profit"><span>Profit disponibil</span> = Profit Brut - Cheltuieli fixe/logistică</p>
                 </div>
                 <div class="explanation-item">
-                    <p id="exp-ad-cost"><span>Costul reclamelor</span> = Suma cheltuită pe publicitate.</p>
+                    <p id="exp-net-profit"><span>Profit net</span> = Profit disponibil - Costul reclamelor</p>
                 </div>
                 <div class="explanation-item">
-                    <p id="exp-net-profit"><span>Profit net</span> = Profit disponibil - Costul reclamelor.</p>
-                </div>
-                <div class="explanation-item">
-                    <p id="exp-poas"><span>POAS</span> = Profit net / Costul reclamelor.</p>
+                    <p id="exp-poas"><span>POAS</span> = Profit net / Costul reclamelor</p>
                 </div>
             </div>
         </div>
@@ -263,31 +255,33 @@
             ro: {
                 title: 'Calculator POAS',
                 inputsTitle: 'Inputs',
-                labelProfit: 'Profit disponibil (RON)',
+                labelGrossProfit: 'Profit Brut (RON)',
+                labelFixedCosts: 'Cheltuieli fixe/logistică (RON)',
                 labelAdCost: 'Costul reclamelor (RON)',
                 resultsTitle: 'Rezultate',
+                labelAvailableProfit: 'Profit disponibil:',
                 labelNetProfit: 'Profit net:',
                 labelPoas: 'POAS:',
-                explanationsTitle: 'Explicații coloane & Logică',
-                expProfit: '<span>Profit disponibil</span> = Profit brut - Cheltuieli fixe/logistice.',
-                expAdCost: '<span>Costul reclamelor</span> = Suma cheltuită pe publicitate.',
-                expNetProfit: '<span>Profit net</span> = Profit disponibil - Costul reclamelor.',
-                expPoas: '<span>POAS</span> = Profit net / Costul reclamelor.',
+                explanationsTitle: 'Explicații & Formule',
+                expAvailableProfit: '<span>Profit disponibil</span> = Profit Brut - Cheltuieli fixe/logistică',
+                expNetProfit: '<span>Profit net</span> = Profit disponibil - Costul reclamelor',
+                expPoas: '<span>POAS</span> = Profit net / Costul reclamelor',
                 langButton: 'EN'
             },
             en: {
                 title: 'POAS Calculator',
                 inputsTitle: 'Inputs',
-                labelProfit: 'Available Profit (RON)',
+                labelGrossProfit: 'Gross Profit (RON)',
+                labelFixedCosts: 'Fixed/Logistic Costs (RON)',
                 labelAdCost: 'Ad Cost (RON)',
                 resultsTitle: 'Results',
+                labelAvailableProfit: 'Available Profit:',
                 labelNetProfit: 'Net Profit:',
                 labelPoas: 'POAS:',
-                explanationsTitle: 'Column Explanations & Logic',
-                expProfit: '<span>Available Profit</span> = Gross Profit - Fixed/Logistic Costs.',
-                expAdCost: '<span>Ad Cost</span> = The amount spent on advertising.',
-                expNetProfit: '<span>Net Profit</span> = Available Profit - Ad Cost.',
-                expPoas: '<span>POAS</span> = Net Profit / Ad Cost.',
+                explanationsTitle: 'Explanations & Formulas',
+                expAvailableProfit: '<span>Available Profit</span> = Gross Profit - Fixed/Logistic Costs',
+                expNetProfit: '<span>Net Profit</span> = Available Profit - Ad Cost',
+                expPoas: '<span>POAS</span> = Net Profit / Ad Cost',
                 langButton: 'RO'
             }
         };
@@ -297,14 +291,15 @@
         function updateContent(lang) {
             document.getElementById('title').textContent = translations[lang].title;
             document.getElementById('inputs-title').textContent = translations[lang].inputsTitle;
-            document.getElementById('label-profit').textContent = translations[lang].labelProfit;
+            document.getElementById('label-gross-profit').textContent = translations[lang].labelGrossProfit;
+            document.getElementById('label-fixed-costs').textContent = translations[lang].labelFixedCosts;
             document.getElementById('label-ad-cost').textContent = translations[lang].labelAdCost;
             document.getElementById('results-title').textContent = translations[lang].resultsTitle;
+            document.getElementById('label-available-profit').textContent = translations[lang].labelAvailableProfit;
             document.getElementById('label-net-profit').textContent = translations[lang].labelNetProfit;
             document.getElementById('label-poas').textContent = translations[lang].labelPoas;
             document.getElementById('explanations-title').textContent = translations[lang].explanationsTitle;
-            document.getElementById('exp-profit').innerHTML = translations[lang].expProfit;
-            document.getElementById('exp-ad-cost').innerHTML = translations[lang].expAdCost;
+            document.getElementById('exp-available-profit').innerHTML = translations[lang].expAvailableProfit;
             document.getElementById('exp-net-profit').innerHTML = translations[lang].expNetProfit;
             document.getElementById('exp-poas').innerHTML = translations[lang].expPoas;
             langToggle.textContent = translations[lang].langButton;
@@ -321,24 +316,30 @@
             modeToggle.textContent = body.classList.contains('light-mode') ? '☀️' : '🌙';
         });
 
-        const availableProfitInput = document.getElementById('available-profit');
+        const grossProfitInput = document.getElementById('gross-profit');
+        const fixedCostsInput = document.getElementById('fixed-costs');
         const adCostInput = document.getElementById('ad-cost');
+        const availableProfitResult = document.getElementById('available-profit-result');
         const netProfitResult = document.getElementById('net-profit-result');
         const poasResult = document.getElementById('poas-result');
 
         function calculatePOAS() {
-            const availableProfit = parseFloat(availableProfitInput.value);
+            const grossProfit = parseFloat(grossProfitInput.value);
+            const fixedCosts = parseFloat(fixedCostsInput.value);
             const adCost = parseFloat(adCostInput.value);
 
-            if (isNaN(availableProfit) || isNaN(adCost)) {
+            if (isNaN(grossProfit) || isNaN(fixedCosts) || isNaN(adCost)) {
+                availableProfitResult.textContent = '---';
                 netProfitResult.textContent = '---';
                 poasResult.textContent = '---';
                 return;
             }
 
+            const availableProfit = grossProfit - fixedCosts;
             const netProfit = availableProfit - adCost;
             const poas = adCost > 0 ? (netProfit / adCost) : 0;
 
+            availableProfitResult.textContent = `${availableProfit.toFixed(2)} RON`;
             netProfitResult.textContent = `${netProfit.toFixed(2)} RON`;
             poasResult.textContent = poas.toFixed(2);
 
@@ -350,7 +351,8 @@
             }
         }
 
-        availableProfitInput.addEventListener('input', calculatePOAS);
+        grossProfitInput.addEventListener('input', calculatePOAS);
+        fixedCostsInput.addEventListener('input', calculatePOAS);
         adCostInput.addEventListener('input', calculatePOAS);
 
         updateContent(currentLang);
