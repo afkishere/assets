@@ -16,6 +16,7 @@
             --result-border-dark: #2b2b2b;
             --positive-color: #38b2ac;
             --negative-color: #e53e3e;
+            --neutral-color: #d1d1d1;
 
             --bg-color-light: #f0f0f0;
             --bg-container-light: #fff;
@@ -169,8 +170,9 @@
             font-size: 15px;
         }
         
-        #poas-result.positive { color: var(--positive-color); }
-        #poas-result.negative { color: var(--negative-color); }
+        .value.positive { color: var(--positive-color); }
+        .value.negative { color: var(--negative-color); }
+        .value.neutral { color: var(--neutral-color); }
 
         .explanations-section {
             padding-top: 10px;
@@ -242,6 +244,13 @@
                 <div class="explanation-item">
                     <p id="exp-poas"><span>POAS</span> = Profit net / Costul reclamelor</p>
                 </div>
+                <div class="explanation-item">
+                    <p id="exp-poas-values">
+                        <span style="color: var(--positive-color);">POAS > 1</span>: Profit; 
+                        <span style="color: var(--negative-color);">POAS < 1</span>: Pierdere; 
+                        <span style="color: var(--neutral-color);">POAS = 1</span>: Breakeven.
+                    </p>
+                </div>
             </div>
         </div>
     </div>
@@ -266,6 +275,7 @@
                 expAvailableProfit: '<span>Profit disponibil</span> = Profit Brut - Cheltuieli fixe/logistică',
                 expNetProfit: '<span>Profit net</span> = Profit disponibil - Costul reclamelor',
                 expPoas: '<span>POAS</span> = Profit net / Costul reclamelor',
+                expPoasValues: `<span style="color: var(--positive-color);">POAS > 1</span>: Profit; <span style="color: var(--negative-color);">POAS < 1</span>: Pierdere; <span style="color: var(--neutral-color);">POAS = 1</span>: Breakeven.`,
                 langButton: 'EN'
             },
             en: {
@@ -282,6 +292,7 @@
                 expAvailableProfit: '<span>Available Profit</span> = Gross Profit - Fixed/Logistic Costs',
                 expNetProfit: '<span>Net Profit</span> = Available Profit - Ad Cost',
                 expPoas: '<span>POAS</span> = Net Profit / Ad Cost',
+                expPoasValues: `<span style="color: var(--positive-color);">POAS > 1</span>: Profit; <span style="color: var(--negative-color);">POAS < 1</span>: Loss; <span style="color: var(--neutral-color);">POAS = 1</span>: Breakeven.`,
                 langButton: 'RO'
             }
         };
@@ -302,6 +313,7 @@
             document.getElementById('exp-available-profit').innerHTML = translations[lang].expAvailableProfit;
             document.getElementById('exp-net-profit').innerHTML = translations[lang].expNetProfit;
             document.getElementById('exp-poas').innerHTML = translations[lang].expPoas;
+            document.getElementById('exp-poas-values').innerHTML = translations[lang].expPoasValues;
             langToggle.textContent = translations[lang].langButton;
         }
 
@@ -337,17 +349,19 @@
 
             const availableProfit = grossProfit - fixedCosts;
             const netProfit = availableProfit - adCost;
-            const poas = adCost > 0 ? (netProfit / adCost) : 0;
-
+            const poas = adCost > 0 ? (netProfit / adCost) + 1 : 0;
+            
             availableProfitResult.textContent = `${availableProfit.toFixed(2)} RON`;
             netProfitResult.textContent = `${netProfit.toFixed(2)} RON`;
             poasResult.textContent = poas.toFixed(2);
 
-            poasResult.classList.remove('positive', 'negative');
+            poasResult.classList.remove('positive', 'negative', 'neutral');
             if (poas > 1) {
                 poasResult.classList.add('positive');
             } else if (poas < 1) {
                 poasResult.classList.add('negative');
+            } else {
+                poasResult.classList.add('neutral');
             }
         }
 
