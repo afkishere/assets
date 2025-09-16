@@ -5,95 +5,198 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POAS Calculator</title>
     <style>
+        :root {
+            --bg-color-dark: #2b2b2b;
+            --bg-container-dark: #1e1e1e;
+            --text-color-dark: #d1d1d1;
+            --header-text-dark: #fff;
+            --input-bg-dark: #2b2b2b;
+            --input-border-dark: #444;
+            --separator-dark: #333;
+            --result-border-dark: #2b2b2b;
+            --positive-color: #38b2ac;
+            --negative-color: #e53e3e;
+
+            --bg-color-light: #f0f0f0;
+            --bg-container-light: #fff;
+            --text-color-light: #444;
+            --header-text-light: #222;
+            --input-bg-light: #f7f7f7;
+            --input-border-light: #ccc;
+            --separator-light: #eee;
+            --result-border-light: #e0e0e0;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background-color: #2b2b2b;
-            color: #d1d1d1;
+            background-color: var(--bg-color-dark);
+            color: var(--text-color-dark);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
             padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
         }
+
+        body.light-mode {
+            background-color: var(--bg-color-light);
+            color: var(--text-color-light);
+        }
+
         .container {
             width: 100%;
             max-width: 450px;
-            background-color: #1e1e1e;
+            background-color: var(--bg-container-dark);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
             padding: 25px;
             display: flex;
             flex-direction: column;
             gap: 20px;
-            border: 1px solid #333;
+            border: 1px solid var(--separator-dark);
+            transition: background-color 0.3s, border-color 0.3s;
         }
+
+        body.light-mode .container {
+            background-color: var(--bg-container-light);
+            border-color: var(--separator-light);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid var(--separator-dark);
             padding-bottom: 15px;
             margin-bottom: 5px;
         }
+
+        body.light-mode .header {
+            border-bottom-color: var(--separator-light);
+        }
+
         .header h1 {
             font-size: 24px;
-            color: #fff;
+            color: var(--header-text-dark);
             margin: 0;
             font-weight: 500;
         }
+
+        body.light-mode .header h1 {
+            color: var(--header-text-light);
+        }
+
         .header .icons {
             display: flex;
             gap: 10px;
             font-size: 20px;
         }
+
         .icons button {
             background-color: transparent;
             border: none;
-            color: #d1d1d1;
+            color: var(--text-color-dark);
             cursor: pointer;
+            font-size: 1.2rem;
         }
+
+        body.light-mode .icons button {
+            color: var(--text-color-light);
+        }
+
         .section-title {
             font-size: 18px;
-            color: #fff;
+            color: var(--header-text-dark);
             font-weight: 500;
             margin-bottom: 10px;
         }
+
+        body.light-mode .section-title {
+            color: var(--header-text-light);
+        }
+
         .input-group, .result-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 0;
         }
+
         .input-group label, .result-item span {
-            color: #999;
+            color: var(--text-color-dark);
             font-size: 15px;
         }
+
+        body.light-mode .input-group label, body.light-mode .result-item span {
+            color: var(--text-color-light);
+        }
+
         .input-group input {
-            background-color: #2b2b2b;
-            border: 1px solid #444;
+            background-color: var(--input-bg-dark);
+            border: 1px solid var(--input-border-dark);
             border-radius: 8px;
-            color: #fff;
+            color: var(--header-text-dark);
             padding: 8px 12px;
             width: 50%;
             text-align: right;
             font-size: 15px;
+            transition: background-color 0.3s, border-color 0.3s;
         }
+
+        body.light-mode .input-group input {
+            background-color: var(--input-bg-light);
+            border-color: var(--input-border-light);
+            color: var(--header-text-light);
+        }
+
         .result-item {
-            border-bottom: 1px solid #2b2b2b;
+            border-bottom: 1px solid var(--result-border-dark);
         }
+
+        body.light-mode .result-item {
+            border-bottom-color: var(--result-border-light);
+        }
+
         .result-item:last-of-type {
             border-bottom: none;
         }
+
         .result-item .value {
             font-weight: bold;
             font-size: 15px;
         }
-        .value.positive {
-            color: #38b2ac; /* O culoare verde-teal pentru profit */
+        
+        #poas-result.positive { color: var(--positive-color); }
+        #poas-result.negative { color: var(--negative-color); }
+
+        .explanations-section {
+            padding-top: 10px;
         }
-        .value.negative {
-            color: #e53e3e; /* O culoare roșie pentru pierdere */
+
+        .explanation-item {
+            margin-bottom: 10px;
+        }
+
+        .explanation-item p {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .explanation-item code {
+            font-family: monospace;
+            background-color: var(--input-bg-dark);
+            padding: 2px 4px;
+            border-radius: 4px;
+            color: var(--header-text-dark);
+            font-size: 13px;
+        }
+
+        body.light-mode .explanation-item code {
+            background-color: var(--input-bg-light);
+            color: var(--header-text-light);
         }
     </style>
 </head>
@@ -101,39 +204,123 @@
 
     <div class="container">
         <div class="header">
-            <h1>POAS Calculator</h1>
+            <h1 id="title">POAS Calculator</h1>
             <div class="icons">
-                <button aria-label="Toggle dark/light mode">🌙</button>
-                <button>EN</button>
+                <button id="mode-toggle" aria-label="Toggle dark/light mode">🌙</button>
+                <button id="lang-toggle">EN</button>
             </div>
         </div>
 
         <div class="inputs-section">
-            <h2 class="section-title">Inputs</h2>
+            <h2 id="inputs-title" class="section-title">Inputs</h2>
             <div class="input-group">
-                <label for="available-profit">Profit disponibil (RON)</label>
+                <label id="label-profit" for="available-profit">Profit disponibil (RON)</label>
                 <input type="number" id="available-profit" value="65">
             </div>
             <div class="input-group">
-                <label for="ad-cost">Costul reclamelor (RON)</label>
+                <label id="label-ad-cost" for="ad-cost">Costul reclamelor (RON)</label>
                 <input type="number" id="ad-cost" value="25">
             </div>
         </div>
 
         <div class="results-section">
-            <h2 class="section-title">Results</h2>
+            <h2 id="results-title" class="section-title">Results</h2>
             <div class="result-item">
-                <span>Profit net:</span>
+                <span id="label-net-profit">Profit net:</span>
                 <span id="net-profit-result" class="value"></span>
             </div>
             <div class="result-item">
-                <span>POAS:</span>
+                <span id="label-poas">POAS:</span>
                 <span id="poas-result" class="value"></span>
+            </div>
+        </div>
+
+        <div class="explanations-section">
+            <h2 id="explanations-title" class="section-title">Column Explanations & Logic</h2>
+            <div id="explanations-content">
+                <div class="explanation-item">
+                    <p id="exp-profit"><span>Profit disponibil</span> = Profit brut - Cheltuieli fixe/logistice.</p>
+                </div>
+                <div class="explanation-item">
+                    <p id="exp-ad-cost"><span>Costul reclamelor</span> = Suma cheltuită pe publicitate.</p>
+                </div>
+                <div class="explanation-item">
+                    <p id="exp-net-profit"><span>Profit net</span> = Profit disponibil - Costul reclamelor.</p>
+                </div>
+                <div class="explanation-item">
+                    <p id="exp-poas"><span>POAS</span> = Profit net / Costul reclamelor.</p>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        const langToggle = document.getElementById('lang-toggle');
+        const modeToggle = document.getElementById('mode-toggle');
+        const body = document.body;
+
+        const translations = {
+            ro: {
+                title: 'Calculator POAS',
+                inputsTitle: 'Inputs',
+                labelProfit: 'Profit disponibil (RON)',
+                labelAdCost: 'Costul reclamelor (RON)',
+                resultsTitle: 'Rezultate',
+                labelNetProfit: 'Profit net:',
+                labelPoas: 'POAS:',
+                explanationsTitle: 'Explicații coloane & Logică',
+                expProfit: '<span>Profit disponibil</span> = Profit brut - Cheltuieli fixe/logistice.',
+                expAdCost: '<span>Costul reclamelor</span> = Suma cheltuită pe publicitate.',
+                expNetProfit: '<span>Profit net</span> = Profit disponibil - Costul reclamelor.',
+                expPoas: '<span>POAS</span> = Profit net / Costul reclamelor.',
+                langButton: 'EN'
+            },
+            en: {
+                title: 'POAS Calculator',
+                inputsTitle: 'Inputs',
+                labelProfit: 'Available Profit (RON)',
+                labelAdCost: 'Ad Cost (RON)',
+                resultsTitle: 'Results',
+                labelNetProfit: 'Net Profit:',
+                labelPoas: 'POAS:',
+                explanationsTitle: 'Column Explanations & Logic',
+                expProfit: '<span>Available Profit</span> = Gross Profit - Fixed/Logistic Costs.',
+                expAdCost: '<span>Ad Cost</span> = The amount spent on advertising.',
+                expNetProfit: '<span>Net Profit</span> = Available Profit - Ad Cost.',
+                expPoas: '<span>POAS</span> = Net Profit / Ad Cost.',
+                langButton: 'RO'
+            }
+        };
+
+        let currentLang = 'ro';
+
+        function updateContent(lang) {
+            document.getElementById('title').textContent = translations[lang].title;
+            document.getElementById('inputs-title').textContent = translations[lang].inputsTitle;
+            document.getElementById('label-profit').textContent = translations[lang].labelProfit;
+            document.getElementById('label-ad-cost').textContent = translations[lang].labelAdCost;
+            document.getElementById('results-title').textContent = translations[lang].resultsTitle;
+            document.getElementById('label-net-profit').textContent = translations[lang].labelNetProfit;
+            document.getElementById('label-poas').textContent = translations[lang].labelPoas;
+            document.getElementById('explanations-title').textContent = translations[lang].explanationsTitle;
+            document.getElementById('exp-profit').innerHTML = translations[lang].expProfit;
+            document.getElementById('exp-ad-cost').innerHTML = translations[lang].expAdCost;
+            document.getElementById('exp-net-profit').innerHTML = translations[lang].expNetProfit;
+            document.getElementById('exp-poas').innerHTML = translations[lang].expPoas;
+            langToggle.textContent = translations[lang].langButton;
+        }
+
+        langToggle.addEventListener('click', () => {
+            currentLang = currentLang === 'ro' ? 'en' : 'ro';
+            updateContent(currentLang);
+            calculatePOAS();
+        });
+
+        modeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            modeToggle.textContent = body.classList.contains('light-mode') ? '☀️' : '🌙';
+        });
+
         const availableProfitInput = document.getElementById('available-profit');
         const adCostInput = document.getElementById('ad-cost');
         const netProfitResult = document.getElementById('net-profit-result');
@@ -155,22 +342,18 @@
             netProfitResult.textContent = `${netProfit.toFixed(2)} RON`;
             poasResult.textContent = poas.toFixed(2);
 
-            // Culoarea textului în funcție de rezultat
+            poasResult.classList.remove('positive', 'negative');
             if (poas > 1) {
-                poasResult.classList.remove('negative');
                 poasResult.classList.add('positive');
             } else if (poas < 1) {
-                poasResult.classList.remove('positive');
                 poasResult.classList.add('negative');
-            } else {
-                poasResult.classList.remove('positive', 'negative');
             }
         }
 
         availableProfitInput.addEventListener('input', calculatePOAS);
         adCostInput.addEventListener('input', calculatePOAS);
 
-        // Calculează la prima încărcare cu valorile implicite
+        updateContent(currentLang);
         calculatePOAS();
     </script>
 
