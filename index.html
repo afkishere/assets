@@ -1,54 +1,178 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ro">
 <head>
-  <meta charset="UTF-8">
-  <title>POAS Calculator</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }
-    .card { background: #fff; padding: 20px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.15); max-width: 400px; margin: auto; }
-    h2 { margin-bottom: 20px; font-size: 1.4rem; text-align: center; }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    input { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; }
-    .result { margin-top: 20px; font-size: 1.2rem; font-weight: bold; text-align: center; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POAS Calculator</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #2b2b2b;
+            color: #d1d1d1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            border: 1px solid #333;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            padding-bottom: 15px;
+            margin-bottom: 5px;
+        }
+        .header h1 {
+            font-size: 24px;
+            color: #fff;
+            margin: 0;
+            font-weight: 500;
+        }
+        .header .icons {
+            display: flex;
+            gap: 10px;
+            font-size: 20px;
+        }
+        .icons button {
+            background-color: transparent;
+            border: none;
+            color: #d1d1d1;
+            cursor: pointer;
+        }
+        .section-title {
+            font-size: 18px;
+            color: #fff;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        .input-group, .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+        }
+        .input-group label, .result-item span {
+            color: #999;
+            font-size: 15px;
+        }
+        .input-group input {
+            background-color: #2b2b2b;
+            border: 1px solid #444;
+            border-radius: 8px;
+            color: #fff;
+            padding: 8px 12px;
+            width: 50%;
+            text-align: right;
+            font-size: 15px;
+        }
+        .result-item {
+            border-bottom: 1px solid #2b2b2b;
+        }
+        .result-item:last-of-type {
+            border-bottom: none;
+        }
+        .result-item .value {
+            font-weight: bold;
+            font-size: 15px;
+        }
+        .value.positive {
+            color: #38b2ac; /* O culoare verde-teal pentru profit */
+        }
+        .value.negative {
+            color: #e53e3e; /* O culoare roșie pentru pierdere */
+        }
+    </style>
 </head>
 <body>
-  <div class="card">
-    <h2>POAS Calculator</h2>
-    <label>Profit brut pe comandă (lei)</label>
-    <input type="number" id="profitBrut" value="115">
 
-    <label>Cheltuieli fixe/logistică (lei)</label>
-    <input type="number" id="cheltuieli" value="50">
+    <div class="container">
+        <div class="header">
+            <h1>POAS Calculator</h1>
+            <div class="icons">
+                <button aria-label="Toggle dark/light mode">🌙</button>
+                <button>EN</button>
+            </div>
+        </div>
 
-    <label>Cost reclame per comandă (lei)</label>
-    <input type="number" id="adsCost" value="25">
+        <div class="inputs-section">
+            <h2 class="section-title">Inputs</h2>
+            <div class="input-group">
+                <label for="available-profit">Profit disponibil (RON)</label>
+                <input type="number" id="available-profit" value="65">
+            </div>
+            <div class="input-group">
+                <label for="ad-cost">Costul reclamelor (RON)</label>
+                <input type="number" id="ad-cost" value="25">
+            </div>
+        </div>
 
-    <div class="result" id="result">Profit net = -, POAS = -</div>
-  </div>
+        <div class="results-section">
+            <h2 class="section-title">Results</h2>
+            <div class="result-item">
+                <span>Profit net:</span>
+                <span id="net-profit-result" class="value"></span>
+            </div>
+            <div class="result-item">
+                <span>POAS:</span>
+                <span id="poas-result" class="value"></span>
+            </div>
+        </div>
+    </div>
 
-  <script>
-    function calcPOAS() {
-      const profitBrut = parseFloat(document.getElementById('profitBrut').value) || 0;
-      const cheltuieli = parseFloat(document.getElementById('cheltuieli').value) || 0;
-      const adsCost = parseFloat(document.getElementById('adsCost').value) || 0;
+    <script>
+        const availableProfitInput = document.getElementById('available-profit');
+        const adCostInput = document.getElementById('ad-cost');
+        const netProfitResult = document.getElementById('net-profit-result');
+        const poasResult = document.getElementById('poas-result');
 
-      const profitDisponibil = profitBrut - cheltuieli;
-      const profitNet = profitDisponibil - adsCost;
-      let poas = '-';
+        function calculatePOAS() {
+            const availableProfit = parseFloat(availableProfitInput.value);
+            const adCost = parseFloat(adCostInput.value);
 
-      if (adsCost > 0) {
-        poas = (profitNet / adsCost).toFixed(2);
-      }
+            if (isNaN(availableProfit) || isNaN(adCost)) {
+                netProfitResult.textContent = '---';
+                poasResult.textContent = '---';
+                return;
+            }
 
-      document.getElementById('result').innerText = `Profit net = ${profitNet} lei, POAS = ${poas}`;
-    }
+            const netProfit = availableProfit - adCost;
+            const poas = adCost > 0 ? (netProfit / adCost) : 0;
 
-    document.querySelectorAll('input').forEach(input => {
-      input.addEventListener('input', calcPOAS);
-    });
+            netProfitResult.textContent = `${netProfit.toFixed(2)} RON`;
+            poasResult.textContent = poas.toFixed(2);
 
-    calcPOAS();
-  </script>
+            // Culoarea textului în funcție de rezultat
+            if (poas > 1) {
+                poasResult.classList.remove('negative');
+                poasResult.classList.add('positive');
+            } else if (poas < 1) {
+                poasResult.classList.remove('positive');
+                poasResult.classList.add('negative');
+            } else {
+                poasResult.classList.remove('positive', 'negative');
+            }
+        }
+
+        availableProfitInput.addEventListener('input', calculatePOAS);
+        adCostInput.addEventListener('input', calculatePOAS);
+
+        // Calculează la prima încărcare cu valorile implicite
+        calculatePOAS();
+    </script>
+
 </body>
 </html>
